@@ -12,13 +12,13 @@ const MetodoPagoFlyweight = (() => {
         }
         return flyweights[nombre];
       },
-      obtenerMetodosPago: () => flyweights,
+      obtenerMetodosPago: () => metodosPago,
     };
   })();
   
   const crearVoucher = (cantidadVouchers) => {
     const vouchers = [];
-    const metodosPago = Object.keys(MetodoPagoFlyweight.obtenerMetodosPago());
+    const metodosPago = MetodoPagoFlyweight.obtenerMetodosPago();
 
     for (let i = 0; i < cantidadVouchers; i++) {
       const metodoPagoAleatorio = MetodoPagoFlyweight.obtenerMetodoPago(
@@ -39,6 +39,7 @@ const MetodoPagoFlyweight = (() => {
   
     console.log(`${cantidadVouchers} vouchers generados:`);
     console.log(vouchers);
+    return vouchers;
   };
   
   export default crearVoucher;

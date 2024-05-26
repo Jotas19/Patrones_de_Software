@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Constants from 'expo-constants';
-import { StyleSheet, Text, View, Button, TouchableWithoutFeedback, Animated, Image } from 'react-native';
-import eventLogger from './Objects/EventLogger.jsx';
+import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Animated } from 'react-native';
 import crearVoucher from './Objects/Voucher.jsx';
+import { useNavigation } from '@react-navigation/native';
 
 const Main = () => {
+  const navigation = useNavigation();
   const [showMenu, setShowMenu] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
 
@@ -12,7 +13,7 @@ const Main = () => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1000,
-      useNativeDriver: true,
+      useNativeDriver: false, // Changed to false
     }).start();
   }, [fadeAnim]);
 
@@ -21,7 +22,8 @@ const Main = () => {
   };
 
   const generarVoucher = () => {
-    crearVoucher(10); // Llama a la función para generar el voucher
+    const vouchers = crearVoucher(20);
+    navigation.navigate('Comprobantes', { vouchers });
   };
 
   const styles = StyleSheet.create({
@@ -32,7 +34,6 @@ const Main = () => {
       paddingHorizontal: 20,
       justifyContent: 'center',
       paddingTop: 60,
-      justifyContent: 'center', 
       alignItems: 'center',
     },
     menuBar: {
@@ -52,7 +53,8 @@ const Main = () => {
       fontWeight: 'bold',
       color: 'white',
     },
-    menuButton: {
+    menuButton:
+    {
       padding: 10,
       borderRadius: 5,
       backgroundColor: '#006691',
