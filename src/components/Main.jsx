@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Constants from 'expo-constants';
-import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Animated } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Animated, TouchableOpacity } from 'react-native';
 import crearVoucher from './Objects/Voucher.jsx';
 import { useNavigation } from '@react-navigation/native';
 
@@ -94,11 +94,11 @@ const Main = () => {
       <Animated.View style={styles.menuBar}>
         <Image source={require('../../assets/images/logo.png')} style={styles.buttonImage} />
         <Text style={styles.title}>SISTEMA POS</Text>
-        <TouchableWithoutFeedback onPress={toggleMenu}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <View style={styles.menuButton}>
-            <Text style={styles.menuButtonText}>☰</Text>
+            <Text style={styles.menuButtonText}>Cerrar Sesión</Text>
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </Animated.View>
 
       <View style={styles.buttonContainer}>
