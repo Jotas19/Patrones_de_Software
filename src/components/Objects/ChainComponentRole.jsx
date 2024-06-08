@@ -2,7 +2,7 @@ import Command from './Command';
 
 class ValidateUserRole extends Command {
     execute(request) {
-        const rolesPermitidos = ['admin', 'cajero', 'supervisor', 'inventario', 'soporte'];
+        const rolesPermitidos = ['admin', 'cajero', 'supervisor', 'inventario', 'soporte', 'usuario'];
         if (!rolesPermitidos.includes(request.role)) {
             request.valid = false;
             request.errors.push('Acceso denegado');
@@ -13,12 +13,13 @@ class ValidateUserRole extends Command {
 class ValidateUserPermissions extends Command {
     execute(request) {
         const rolePermissions = {
-            admin: ['crear', 'modificar', 'eliminar', 'inventario', 'informes', 'clientes', 'proveedores', 'ventas', 'compras', 'empleados'],
-            cajero: ['ventas', 'clientes'],
-            supervisor: ['modificar', 'informes', 'clientes', 'proveedores', 'ventas', 'compras', 'empleados'],
-            inventario: ['modificar', 'inventario', 'informes', 'clientes', 'proveedores', 'ventas', 'compras', 'empleados'],
-            soporte: ['modificar', 'clientes', 'proveedores', 'empleados']
-        };
+            admin: ['generarVoucher', 'realizarVenta', 'consultarVoucher', 'cierreLote'],
+            cajero: ['generarVoucher'],
+            supervisor: ['generarVoucher', 'realizarVenta', 'consultarVoucher', 'cierreLote'],
+            inventario: ['consultarVoucher'],
+            soporte: ['generarVoucher', 'realizarVenta', 'consultarVoucher'],
+            usuario: ['generarVoucher', 'realizarVenta']
+        };        
 
         const validPermissions = rolePermissions[request.role];
         if (!validPermissions) {
