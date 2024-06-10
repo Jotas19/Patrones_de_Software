@@ -13,7 +13,6 @@ const Registrar = ({ navigation }) => {
     const [phone, setPhone] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState([]);
 
     const handleRegistrar = () => {
         const request = {
@@ -39,7 +38,6 @@ const Registrar = ({ navigation }) => {
                 navigation.replace('Inicio');
             });
         } else {
-            setErrors(request.errors);
             Swal.fire({
                 icon: 'error',
                 title: 'Error de registro',
@@ -94,13 +92,6 @@ const Registrar = ({ navigation }) => {
                         <Text style={styles.registerText}>¿Ya tienes una cuenta? Iniciar sesión</Text>
                     </TouchableOpacity><br/>
                     <Button title="Registrarse" onPress={handleRegistrar} />
-                    {errors.length > 0 && (
-                        <View style={styles.errorContainer}>
-                            {errors.map((error, index) => (
-                                <Text key={index} style={styles.errorText}>{error}</Text>
-                            ))}
-                        </View>
-                    )}
                 </View>
             </View>
         </ImageBackground>
@@ -111,13 +102,10 @@ const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
         resizeMode: 'cover',
-        justifyContent: 'center',
     },
     container: {
-        flex: 1,
-        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        paddingTop: '3%',
     },
     formContainer: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -138,13 +126,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
-    },
-    errorContainer: {
-        marginTop: 10,
-        alignItems: 'center',
-    },
-    errorText: {
-        color: 'red',
     },
     registerText: {
         marginTop: 10,

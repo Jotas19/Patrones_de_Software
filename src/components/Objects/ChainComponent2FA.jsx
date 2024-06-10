@@ -29,8 +29,9 @@ class ValidatePasswordCelNumber extends Command {
 class ValidatePassword2FACode extends Command {
     execute(request) {
         if (request.code) {
-            // Lógica para verificar con código de seguridad establecido por el usuario
-            if (request.code === '5468') {
+            // Lógica para verificar con código de seguridad establecido por el usuario, puede usarse modal para pedir código
+            let userCode = prompt("Por favor ingrese el código de autenticación:");
+            if (userCode == request.code) {
                 console.log("Código 2FA válido.");
                 request.valid = true;
             } else {

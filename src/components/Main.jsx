@@ -3,11 +3,14 @@ import Constants from 'expo-constants';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Animated, TouchableOpacity } from 'react-native';
 import crearVoucher from './Objects/Voucher.jsx';
 import { useNavigation } from '@react-navigation/native';
+import ChainComponentRolePermission from '../components/Objects/ChainComponentRole.jsx';
+import Swal from 'sweetalert2';
 
 const Main = () => {
   const navigation = useNavigation();
   const [showMenu, setShowMenu] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
+  const userRole = 'admin';
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -21,9 +24,43 @@ const Main = () => {
     setShowMenu(!showMenu);
   };
 
-  const generarVoucher = () => {
-    const vouchers = crearVoucher(20);
-    navigation.navigate('Comprobantes', { vouchers });
+  const validateAndExecute = (action) => {
+    const request = { role: userRole, valid: true, errors: [], action: action };
+    const rolePermissionValidator = new ChainComponentRolePermission();
+    rolePermissionValidator.processRequest(request);
+
+    if (!request.valid) {
+      const errorMessage = request.errors.join(', ');
+      Swal.fire({
+        title: 'Error de autenticación',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+      return;
+    }
+
+    switch(action) {
+      case 'generarVoucher':
+        const vouchers = crearVoucher(20);
+        navigation.navigate('Comprobantes', { vouchers });
+        break;
+      case 'realizarVenta':
+        // Lógica para realizar venta
+        console.log('Ejecutando venta');
+        break;
+      case 'consultarVoucher':
+        // Lógica para consultar voucher
+        console.log('Ejecutando consulta');
+        break;
+      case 'cierreLote':
+        // Lógica para cierre de lote
+        console.log('Ejecutando cierre');
+        break;
+      default:
+        console.log('Acción desconocida');
+        break;
+    }
   };
 
   const styles = StyleSheet.create({
@@ -32,8 +69,7 @@ const Main = () => {
       marginTop: Constants.statusBarHeight,
       backgroundColor: '#f0f7ff',
       paddingHorizontal: 20,
-      justifyContent: 'center',
-      paddingTop: 60,
+      paddingTop: 150,
       alignItems: 'center',
     },
     menuBar: {
@@ -53,8 +89,7 @@ const Main = () => {
       fontWeight: 'bold',
       color: 'white',
     },
-    menuButton:
-    {
+    menuButton: {
       padding: 10,
       borderRadius: 5,
       backgroundColor: '#006691',
@@ -65,6 +100,8 @@ const Main = () => {
     },
     buttonContainer: {
       marginBottom: 20,
+      width: '100%',
+      alignItems: 'center',
     },
     button: {
       paddingVertical: 15,
@@ -83,7 +120,7 @@ const Main = () => {
       textAlign: 'center',
     },
     buttonImage: {
-      width: 70, 
+      width: 70,
       height: 70,
       marginRight: 10,
     },
@@ -102,7 +139,7 @@ const Main = () => {
       </Animated.View>
 
       <View style={styles.buttonContainer}>
-        <TouchableWithoutFeedback onPress={generarVoucher}>
+        <TouchableWithoutFeedback onPress={() => validateAndExecute('generarVoucher')}>
           <View style={styles.button}>
             <Image source={require('../../assets/images/comprobante.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Generar Voucher</Text>
@@ -111,7 +148,7 @@ const Main = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableWithoutFeedback onPress={generarVoucher}>
+        <TouchableWithoutFeedback onPress={() => validateAndExecute('realizarVenta')}>
           <View style={styles.button}>
             <Image source={require('../../assets/images/venta.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Realizar Venta</Text>
@@ -120,7 +157,7 @@ const Main = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableWithoutFeedback onPress={generarVoucher}>
+        <TouchableWithoutFeedback onPress={() => validateAndExecute('consultarVoucher')}>
           <View style={styles.button}>
             <Image source={require('../../assets/images/comprobante.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Consultar Voucher</Text>
@@ -129,7 +166,7 @@ const Main = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableWithoutFeedback onPress={generarVoucher}>
+        <TouchableWithoutFeedback onPress={() => validateAndExecute('cierreLote')}>
           <View style={styles.button}>
             <Image source={require('../../assets/images/cierre.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Cierre de Lote</Text>

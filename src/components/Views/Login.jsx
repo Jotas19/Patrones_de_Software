@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, ImageBackground, Image, TouchableOpacity, Picker } from 'react-native';
 import ChainComponent2FA from '../Objects/ChainComponent2FA.jsx';
-import ChainComponentRolePermission from '../Objects/ChainComponentRole.jsx';
 import Swal from 'sweetalert2';
 
 const backgroundImage = require('../../../assets/images/login.jpg');
@@ -21,12 +20,10 @@ const Login = ({ navigation }) => {
             errors: [],
             email: 'admin@gmail.com',
             code: '5468',
-            role: 'admin',
-            permissions: ['crear', 'modificar', 'eliminar', 'inventario', 'informes', 'clientes', 'proveedores', 'ventas', 'compras', 'empleados'],
             authMethod
         };
 
-        if (username !== 'admin' || password !== '123JL.a') {
+        if (username !== 'admin' || password !== 'admin12.') {
             request.valid = false;
             request.errors.push('Nombre de usuario o contraseña incorrectos');
         }
@@ -36,10 +33,6 @@ const Login = ({ navigation }) => {
             const chain2FA = new ChainComponent2FA();
             chain2FA.processRequest(request);
         }
-
-        // Procesa la solicitud de autenticación de roles y permisos
-        const rolePermissionValidator = new ChainComponentRolePermission();
-        rolePermissionValidator.processRequest(request);
 
         // Si la solicitud sigue siendo válida, procede con el inicio de sesión
         if (request.valid) {
@@ -52,7 +45,9 @@ const Login = ({ navigation }) => {
                 navigation.replace('Inicio');
             });
         } else {
-            setErrors(request.errors);
+            // No necesitamos mostrar los errores aquí
+            // setErrors(request.errors);
+
             Swal.fire({
                 icon: 'error',
                 title: 'Error de autenticación',
@@ -94,13 +89,6 @@ const Login = ({ navigation }) => {
                         <Text style={styles.registerText}>¿Aún no tienes cuenta? Regístrate</Text>
                     </TouchableOpacity><br/>
                     <Button title="Iniciar sesión" onPress={handleLogin} />
-                    {errors.length > 0 && (
-                        <View style={styles.errorContainer}>
-                            {errors.map((error, index) => (
-                                <Text key={index} style={styles.errorText}>{error}</Text>
-                            ))}
-                        </View>
-                    )}
                 </View>
             </View>
         </ImageBackground>
@@ -111,13 +99,10 @@ const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
         resizeMode: 'cover',
-        justifyContent: 'center',
     },
     container: {
-        flex: 1,
-        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        paddingTop: '9%',
     },
     formContainer: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -147,13 +132,6 @@ const styles = StyleSheet.create({
     registerText: {
         color: '#007BFF',
         textDecorationLine: 'underline',
-    },
-    errorContainer: {
-        marginTop: 10,
-        alignItems: 'center',
-    },
-    errorText: {
-        color: 'red',
     },
 });
 
