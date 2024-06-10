@@ -1,10 +1,11 @@
-import React from 'react' 
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Main from './src/components/Main.jsx'
+import Main from './src/components/Main.jsx';
 import VoucherView from './src/components/Views/Voucher_View.jsx';
 import Login from './src/components/Views/Login.jsx';
 import Registrar from './src/components/Views/Registrar.jsx';
+import firebase from './src/components/utils/Firebase.js';
 
 const Stack = createStackNavigator();
 
