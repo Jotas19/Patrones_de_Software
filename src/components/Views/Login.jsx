@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 const backgroundImage = require('../../../assets/images/login.jpg');
 const logoImage = require('../../../assets/images/autenticacion.png');
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, setIsAuthenticated }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [authMethod, setAuthMethod] = useState('');
@@ -42,12 +42,10 @@ const Login = ({ navigation }) => {
                 icon: 'success',
             }).then(() => {
                 // Lógica para redirigir a la página de inicio dependiendo de los permisos y roles
+                setIsAuthenticated(true);
                 navigation.replace('Inicio');
             });
         } else {
-            // No necesitamos mostrar los errores aquí
-            // setErrors(request.errors);
-
             Swal.fire({
                 icon: 'error',
                 title: 'Error de autenticación',

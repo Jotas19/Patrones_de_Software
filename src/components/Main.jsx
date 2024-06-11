@@ -6,19 +6,28 @@ import { useNavigation } from '@react-navigation/native';
 import ChainComponentRolePermission from '../components/Objects/ChainComponentRole.jsx';
 import Swal from 'sweetalert2';
 
-const Main = () => {
+const Main = ({ setIsAuthenticated, isAuthenticated }) => {
   const navigation = useNavigation();
   const [showMenu, setShowMenu] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
-  const userRole = 'admin';
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
+    //Lógica para obtener el rol del usuario
+    if (isAuthenticated) {
+      // Si el usuario está autenticado, establece su rol
+      setUserRole('admin');
+    } else {
+      // Si el usuario no está autenticado, establece su rol como 'invitado'
+      setUserRole('invitado');
+    }
+
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1000,
       useNativeDriver: false, // Changed to false
     }).start();
-  }, [fadeAnim]);
+  }, [fadeAnim, isAuthenticated]);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -60,6 +69,17 @@ const Main = () => {
       default:
         console.log('Acción desconocida');
         break;
+    }
+  };
+
+  const handleAuthButtonPress = () => {
+    if (isAuthenticated) {
+      setIsAuthenticated(false);
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
+    } else {
+      navigation.navigate('Login');
     }
   };
 
@@ -131,9 +151,9 @@ const Main = () => {
       <Animated.View style={styles.menuBar}>
         <Image source={require('../../assets/images/logo.png')} style={styles.buttonImage} />
         <Text style={styles.title}>SISTEMA POS</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity onPress={handleAuthButtonPress}>
           <View style={styles.menuButton}>
-            <Text style={styles.menuButtonText}>Cerrar Sesión</Text>
+            <Text style={styles.menuButtonText}>{isAuthenticated ? 'Cerrar Sesión' : 'Iniciar Sesión'}</Text>
           </View>
         </TouchableOpacity>
       </Animated.View>
